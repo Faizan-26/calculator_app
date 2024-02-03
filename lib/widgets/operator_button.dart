@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
 class OperatorButton extends StatelessWidget {
-  const OperatorButton({super.key, required this.buttonText});
+  const OperatorButton(
+      {super.key,
+      required this.buttonText,
+      required this.btnTaped,
+      required this.onLongPressedClear});
+  final void Function() onLongPressedClear;
   final String buttonText;
-
+  final void Function(String s) btnTaped;
   bool isNumeric() {
     try {
       double.parse(buttonText);
@@ -28,7 +33,12 @@ class OperatorButton extends StatelessWidget {
         splashColor: Colors.red, // Change the splash color here
         borderRadius: BorderRadius.circular(25),
         onTap: () {
-          print("object");
+          btnTaped(buttonText);
+        },
+        onLongPress: () {
+          if (buttonText == 'C') {
+            onLongPressedClear();
+          }
         },
         child: Center(
           child: Text(
