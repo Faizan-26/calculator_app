@@ -1,3 +1,4 @@
+import 'package:calculator_app/screen/calc_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -7,16 +8,28 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Calculator App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
         useMaterial3: true,
       ),
-      home: const Text("Stare at the screen and see the magic happen!"),
+      home: Scaffold(
+        appBar: AppBar(
+          actions: [
+            IconButton(
+                onPressed: () {}, icon: const Icon(Icons.history_toggle_off)),
+            IconButton(onPressed: () {}, icon: const Icon(Icons.settings)),
+            IconButton(onPressed: () {}, icon: const Icon(Icons.info_outline)),
+            IconButton(
+                onPressed: () {}, icon: const Icon(Icons.more_vert_rounded)),
+          ],
+        ),
+        body: const CalcScreen(),
+      ),
     );
   }
 }
