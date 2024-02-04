@@ -1,35 +1,28 @@
-import 'package:calculator_app/screen/calc_screen.dart';
+import 'package:calculator_app/provider/theme_provider.dart';
+import 'package:calculator_app/screen/calculator_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends ConsumerWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colorPro = ref.watch(colorProvider).color;
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Calculator App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
-        useMaterial3: true,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          actions: [
-            IconButton(
-                onPressed: () {}, icon: const Icon(Icons.history_toggle_off)),
-            IconButton(onPressed: () {}, icon: const Icon(Icons.settings)),
-            IconButton(onPressed: () {}, icon: const Icon(Icons.info_outline)),
-            IconButton(
-                onPressed: () {}, icon: const Icon(Icons.more_vert_rounded)),
-          ],
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: colorPro,
         ),
-        body: const CalcScreen(),
       ),
+      home: const CalculatorScreen(),
     );
   }
 }
