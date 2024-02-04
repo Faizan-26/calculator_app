@@ -12,14 +12,20 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final colorPro = ref.watch(colorProvider).color;
+    Color? themeColor;
+    Future<void> getSavedTheme() async {
+      themeColor = await ref.watch(colorProvider).getColor();
+      // return theme;
+    }
 
+    // Color themeColor = getSavedTheme(ref);
+    getSavedTheme();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Calculator App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: colorPro,
+          seedColor: themeColor ?? const Color.fromARGB(11, 50, 235, 217),
         ),
       ),
       home: const CalculatorScreen(),

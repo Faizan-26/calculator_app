@@ -25,7 +25,6 @@ class _CalcScreenState extends State<CalcScreen> {
 
       resultExpression = resultExpression.replaceAllMapped(
           RegExp(r'√(\d+)'), (match) => '${match.group(1)}^0.5');
-      // print(resultExpression);
       Expression exp = p.parse(resultExpression);
 
       ContextModel cm = ContextModel();
@@ -103,7 +102,6 @@ class _CalcScreenState extends State<CalcScreen> {
               child: Container(
                 margin: const EdgeInsets.symmetric(vertical: 30),
                 child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

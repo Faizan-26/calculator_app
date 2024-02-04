@@ -18,8 +18,8 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
   @override
   void initState() {
     super.initState();
-    wakeLock = true;
-    selectedColor = ref.watch(colorProvider).color;
+    wakeLock = false;
+    selectedColor = ref.read(colorProvider).color;
   }
 
   @override
@@ -48,7 +48,6 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),
-              enableFeedback: true,
               title: const Text('Customize color'),
               onTap: () {
                 showDialog(
@@ -63,9 +62,7 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
                           ColorPicker(
                             currentColor: selectedColor,
                             onChange: (value) {
-                              setState(() {
-                                selectedColor = value;
-                              });
+                              selectedColor = value;
                             },
                           )
                         ],
@@ -73,11 +70,7 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
                       actions: [
                         TextButton(
                           onPressed: () {
-                            final container = ProviderContainer();
-                            container
-                                .read(colorProvider.notifier)
-                                .changeColor(selectedColor);
-                            container.dispose();
+                            ref.read(colorProvider).changeColor(selectedColor);
                             Navigator.of(context).pop();
                           },
                           child: const Text('Select'),
@@ -93,13 +86,18 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
               value: wakeLock,
               onChanged: (val) {
                 if (val != null) {
+                  wakeLock = val;
                   setState(() {
-                    wakeLock = val;
-                    Wakelock.toggle(enable: val);
+                    Wakelock.toggle(enable: wakeLock);
                   });
+                  // print("WAKE LOCK VALUE : $wakeLock");
                 }
               },
-              title: const Text('Vibrate on keypress'),
+              title: const Text(
+                'Prevent phone from sleep while the app is in foreground',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+              ),
+              activeColor: Theme.of(context).colorScheme.primary,
             )
           ],
         ),

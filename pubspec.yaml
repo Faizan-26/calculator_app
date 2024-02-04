@@ -38,6 +38,7 @@ dependencies:
   color_picker_field: ^2.1.0
   flutter_riverpod: ^1.0.0-dev.6
   wakelock: ^0.6.2
+  shared_preferences: ^2.2.2
   # flutter_riverpod: ^0.14.0
 
 dev_dependencies:
