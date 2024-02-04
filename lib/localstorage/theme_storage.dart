@@ -16,9 +16,3 @@ class StoreTheme {
     return Color(colorValue);
   }
 }
-
-// class StoreCalculatorHistory {
-//   static const historyKey = "calculator_history";
-
-  
-// }

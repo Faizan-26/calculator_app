@@ -7,28 +7,61 @@ void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends ConsumerWidget {
+// class MyApp extends ConsumerWidget {
+//   const MyApp({Key? key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     Color? themeColor = ref.watch(colorProvider).color;
+
+//     themeColor = ref.watch(colorProvider).color;
+
+//     return MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       title: 'Calculator App',
+//       theme: ThemeData(
+//         colorScheme: ColorScheme.fromSeed(
+//           seedColor: themeColor,
+//         ),
+//       ),
+//       home: const CalculatorScreen(),
+//     );
+//   }
+// }
+
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    Color? themeColor;
-    Future<void> getSavedTheme() async {
-      themeColor = await ref.watch(colorProvider).getColor();
-      // return theme;
-    }
+  MyAppState createState() => MyAppState();
+}
 
-    // Color themeColor = getSavedTheme(ref);
-    getSavedTheme();
+class MyAppState extends ConsumerState<MyApp> {
+  Color? themeColor;
+  void setThemeFromStorage() async {
+    await ref.watch(colorProvider).getColor().then((value) {
+      setState(() {
+        themeColor = value;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    setThemeFromStorage();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Calculator App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: themeColor ?? const Color.fromARGB(11, 50, 235, 217),
-        ),
+        colorScheme: themeColor != null
+            ? ColorScheme.fromSeed(
+                seedColor: themeColor!,
+              )
+            : null,
       ),
-      home: const CalculatorScreen(),
+      home: themeColor == null
+          ? const CircularProgressIndicator()
+          : const Center(child: CalculatorScreen()),
     );
   }
 }
