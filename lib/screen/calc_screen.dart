@@ -30,8 +30,6 @@ class _CalcScreenState extends ConsumerState<CalcScreen> {
       resultExpression = resultExpression.replaceAllMapped(
           RegExp(r'√(\d+\.?\d*)'), (match) => '(${match.group(1)})^0.5');
 
-      print(resultExpression);
-
       // Parse and evaluate the expression
       Expression exp = p.parse(resultExpression);
       ContextModel cm = ContextModel();
@@ -43,11 +41,11 @@ class _CalcScreenState extends ConsumerState<CalcScreen> {
 
       // Replace power expressions back to original square root expressions
       resultExpression = resultExpression.replaceAllMapped(
-        RegExp(r'1\*\((\d+\.?\d*)\)\^0.5'), (match) => '√${match.group(1)}');
+          RegExp(r'1\*\((\d+\.?\d*)\)\^0.5'), (match) => '√${match.group(1)}');
 
       resultExpression = resultExpression.replaceAllMapped(
-        RegExp(r'(\d+\.?\d*) \* √(\d+\.?\d*)'),
-        (match) => '${match.group(1)} * √${match.group(2)}');
+          RegExp(r'(\d+\.?\d*) \* √(\d+\.?\d*)'),
+          (match) => '${match.group(1)} * √${match.group(2)}');
       // Add to history and update state
       ref.watch(historyProvider).addToHistory(resultExpression, result);
       setState(() {
@@ -55,7 +53,9 @@ class _CalcScreenState extends ConsumerState<CalcScreen> {
         resultExpression = result;
       });
     } catch (e) {
-      print(e);
+      setState(() {
+        resultExpression = "Error";
+      });
     }
   }
 
@@ -65,6 +65,18 @@ class _CalcScreenState extends ConsumerState<CalcScreen> {
 
   void btnTaped(String s) {
     HapticFeedback.lightImpact();
+    if (resultExpression == "Error") {
+      if (s == "C") {
+        setState(() {
+          resultExpression = "0";
+        });
+      } else {
+        setState(() {
+          resultExpression = s;
+        });
+      }
+      return;
+    }
     // if (s == "C") {
     //   resultExpression =
     //       resultExpression.substring(0, resultExpression.length - 1);
@@ -159,7 +171,6 @@ class _CalcScreenState extends ConsumerState<CalcScreen> {
   @override
   void dispose() {
     super.dispose();
-    // store the history
     ref.watch(historyProvider).storeHistory();
   }
 
