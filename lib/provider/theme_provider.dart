@@ -5,25 +5,33 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class ColorProvider extends ChangeNotifier {
   Future<Color> loadInitialColor() async {
     Color themeColor = await StoreTheme.loadThemeColor();
+    notifyListeners();
     return themeColor;
   }
 
-  Color _themeColor = const Color.fromARGB(255, 68, 138, 255);
+  Color? _themeColor;
 
   Color get color {
     loadInitialColor();
-    return _themeColor;
+    while (_themeColor != null) {
+      if (_themeColor != null) {
+        return _themeColor!;
+      }
+    }
+    return _themeColor!;
+    // return _themeColor;
   }
 
   Future<Color> getColor() async {
     _themeColor = await loadInitialColor();
-    return _themeColor;
+    notifyListeners();
+    return _themeColor!;
   }
 
   void changeColor(Color color) {
     _themeColor = color;
+    StoreTheme.storeThemeColor(_themeColor!);
     notifyListeners();
-    StoreTheme.storeThemeColor(_themeColor);
   }
 }
 

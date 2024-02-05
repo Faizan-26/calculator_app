@@ -1,6 +1,7 @@
 import 'package:calculator_app/provider/calculation_history_provider.dart';
 import 'package:calculator_app/screen/contants.dart';
 import 'package:calculator_app/widgets/operator_button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:math_expressions/math_expressions.dart';
@@ -16,51 +17,114 @@ class CalcScreen extends ConsumerStatefulWidget {
 class _CalcScreenState extends ConsumerState<CalcScreen> {
   String writtenExpression = "";
   String resultExpression = "0";
-
+  int pointCount = 0;
   void evaluatedExpression() {
     try {
       Parser p = Parser();
 
+      // Replace square root expressions with equivalent power expressions
       resultExpression = resultExpression.replaceAllMapped(
-          RegExp(r'(\d+)√(\d+)'),
-          (match) => '${match.group(1)} * √${match.group(2)}');
+          RegExp(r'(\d+\.?\d*)√(\d+\.?\d*)'),
+          (match) => '${match.group(1)} * (${match.group(2)})^0.5');
 
       resultExpression = resultExpression.replaceAllMapped(
-          RegExp(r'√(\d+)'), (match) => '${match.group(1)}^0.5');
+          RegExp(r'√(\d+\.?\d*)'), (match) => '(${match.group(1)})^0.5');
+
+      print(resultExpression);
+
+      // Parse and evaluate the expression
       Expression exp = p.parse(resultExpression);
-
       ContextModel cm = ContextModel();
       double eval = exp.evaluate(EvaluationType.REAL, cm);
-      String result = eval.toString();
-      if (result.endsWith(".0")) {
-        result = result.substring(0, result.length - 2);
-      }
+
+      // Format the result
+      String result =
+          eval.toStringAsFixed(eval.truncateToDouble() == eval ? 0 : 2);
+
+      // Replace power expressions back to original square root expressions
       resultExpression = resultExpression.replaceAllMapped(
-          RegExp(r'(\d+)\^0.5'), (match) => '√${match.group(1)}');
+        RegExp(r'1\*\((\d+\.?\d*)\)\^0.5'), (match) => '√${match.group(1)}');
+
       resultExpression = resultExpression.replaceAllMapped(
-          RegExp(r'(\d+) \* √(\d+)'),
-          (match) => '${match.group(1)}√${match.group(2)}');
+        RegExp(r'(\d+\.?\d*) \* √(\d+\.?\d*)'),
+        (match) => '${match.group(1)} * √${match.group(2)}');
+      // Add to history and update state
       ref.watch(historyProvider).addToHistory(resultExpression, result);
       setState(() {
         writtenExpression = resultExpression;
         resultExpression = result;
       });
     } catch (e) {
-      // do nothing
+      print(e);
     }
+  }
+
+  bool isNumeric(String ch) {
+    return double.tryParse(ch) != null;
   }
 
   void btnTaped(String s) {
     HapticFeedback.lightImpact();
+    // if (s == "C") {
+    //   resultExpression =
+    //       resultExpression.substring(0, resultExpression.length - 1);
+    //   return;
+    // }
+    if (s == "=") {
+      evaluatedExpression();
+      return;
+    }
+
+    if (s == ".") {
+      pointCount++;
+    }
+    if (pointCount == 2) {
+      pointCount--;
+      return;
+    }
+    // print("Written expresion $resultExpression and $s");
+    bool isCurrentSymbolOperator = s == "+" ||
+        s == "-" ||
+        s == "×" ||
+        s == "÷" ||
+        s == "/" ||
+        s == "^" ||
+        s == "%";
+    if (isCurrentSymbolOperator) {
+      pointCount = 0;
+    }
+    bool isLastCharacterOperator =
+        resultExpression[resultExpression.length - 1] == "+" ||
+            resultExpression[resultExpression.length - 1] == "-" ||
+            resultExpression[resultExpression.length - 1] == "*" ||
+            resultExpression[resultExpression.length - 1] == "/" ||
+            // resultExpression[resultExpression.length - 1] == "√" ||
+            resultExpression[resultExpression.length - 1] == "^" ||
+            resultExpression[resultExpression.length - 1] == "%";
+    if (isLastCharacterOperator && isCurrentSymbolOperator) {
+      return;
+    }
+    if (s == "√") {
+      // if last character is a number then add * 1 * √ before the square root else add 1 * √
+      // suggest code here
+      if (resultExpression.isNotEmpty) {
+        if (isNumeric(resultExpression[resultExpression.length - 1]) &&
+            resultExpression[resultExpression.length - 1] != "0") {
+          s = "*1*√";
+        } else {
+          s = "1*√";
+        }
+      }
+    }
+    if (isCurrentSymbolOperator) {
+      pointCount = 0;
+    }
     if (resultExpression.length == 1 && s != ".") {
       if (resultExpression == "0") {
         resultExpression = "";
       }
     }
-    if (s == "=") {
-      evaluatedExpression();
-      return;
-    }
+
     if (s == "C") {
       if (resultExpression.isNotEmpty) {
         setState(() {
@@ -84,7 +148,7 @@ class _CalcScreenState extends ConsumerState<CalcScreen> {
   }
 
   void onLongPressedClear() {
-    
+    pointCount = 0;
     HapticFeedback.heavyImpact();
     setState(() {
       writtenExpression = "";

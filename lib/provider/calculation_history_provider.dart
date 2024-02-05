@@ -5,8 +5,8 @@ import 'package:hive/hive.dart';
 
 class HistoryNotifier extends ChangeNotifier {
   List<Map<String, String>> _calculationHistory = [];
-
   List<Map<String, String>> get history => _calculationHistory;
+  Box? box;
 
   void addToHistory(String answer, String result) {
     _calculationHistory.add({
@@ -17,27 +17,33 @@ class HistoryNotifier extends ChangeNotifier {
   }
 
   void storeHistory() async {
-    var box =
-        await Hive.openBox<List<Map<String, String>>>("calculator_history");
-    await box.put(historyKey, _calculationHistory);
-    box.close();
+    if (box == null || !box!.isOpen) {
+      box = Hive.box<List<Map<String, String>>>("calculationHistory");
+    }
+    await box!.put(historyKey, _calculationHistory);
+    notifyListeners();
   }
 
-  void clearAllHistory() async {
-    print("CLEARING");
+  Future<void> clearAllHistory() async {
     _calculationHistory = [];
-    var box =
-        await Hive.openBox<List<Map<String, String>>>("calculator_history");
-    await box.clear();
-    box.close();
+    if (box == null || !box!.isOpen) {
+      box = Hive.box<List<Map<String, String>>>("calculationHistory");
+    }
+    box!.clear();
+    notifyListeners();
   }
 
   void loadHistory() async {
-    var box = await Hive.openBox("calculator_history");
-    final data = box.get(historyKey, defaultValue: <dynamic>[]);
-
+    if (box == null || !box!.isOpen) {
+      box = Hive.box<List<dynamic>>("calculationHistory");
+    }
+    final data = await box!.get(historyKey);
+    // box.get(historyKey);
+    
     List<Map<String, String>> convertedData = [];
-
+    if (data == null) {
+      return;
+    }
     for (var item in data) {
       if (item != null && item is Map<dynamic, dynamic>) {
         String question = item['question'].toString();
@@ -45,13 +51,33 @@ class HistoryNotifier extends ChangeNotifier {
         convertedData.add({'question': question, 'result': result});
       }
     }
-
     _calculationHistory = convertedData;
     notifyListeners();
-    box.close();
-    // print("Loaded $_calculationHistory");
   }
 }
+
+// void loadHistory() async {
+//   if (box == null || !box!.isOpen) {
+//     box = Hive.box<List<Map<String, String>>>("calculationHistory");
+//   }
+//   final data = await box!.get(historyKey);
+//   // box.get(historyKey);
+//   print(data);
+//   List<Map<String, String>> convertedData = [];
+//   if (data == null) {
+//     return;
+//   }
+//   for (var item in data) {
+//     if (item != null && item is Map<dynamic, dynamic>) {
+//       String question = item['question'].toString();
+//       String result = item['result'].toString();
+//       convertedData.add({'question': question, 'result': result});
+//     }
+//   }
+//   _calculationHistory = convertedData;
+//   notifyListeners();
+// }
+//}
 
 final historyProvider = ChangeNotifierProvider<HistoryNotifier>((ref) {
   return HistoryNotifier();

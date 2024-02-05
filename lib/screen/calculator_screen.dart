@@ -9,11 +9,14 @@ class CalculatorScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final List<Map<String, String>> calculationHistory =
+    List<Map<String, String>> calculationHistory =
         ref.watch(historyProvider).history;
     final sizedBoxMaxHeight = MediaQuery.of(context).size.height - 350;
     final sizedBoxMinHeight = calculationHistory.length * 70.0;
-    print("Calculation History $calculationHistory");
+    Future<void> clearButtonPressed() async {
+      ref.read(historyProvider).clearAllHistory();
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -42,6 +45,8 @@ class CalculatorScreen extends ConsumerWidget {
                                     child: Text("Do some calculations!"),
                                   )
                                 : ListView.builder(
+                                    reverse: true,
+                                    scrollDirection: Axis.vertical,
                                     itemCount: calculationHistory.length,
                                     itemBuilder: (context, index) {
                                       return ListTile(
@@ -58,8 +63,9 @@ class CalculatorScreen extends ConsumerWidget {
                       actions: [
                         TextButton(
                             onPressed: () {
-                              ref.watch(historyProvider).clearAllHistory();
-                              Navigator.of(context).pop();
+                              clearButtonPressed().then((value) {
+                                Navigator.of(context).pop();
+                              });
                             },
                             child: const Text("Clear")),
                         TextButton(

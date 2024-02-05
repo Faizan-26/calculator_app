@@ -6,16 +6,12 @@ class OperatorButton extends StatelessWidget {
       required this.buttonText,
       required this.btnTaped,
       required this.onLongPressedClear});
+
   final void Function() onLongPressedClear;
   final String buttonText;
   final void Function(String s) btnTaped;
   bool isNumeric() {
-    try {
-      double.parse(buttonText);
-      return true;
-    } catch (e) {
-      return false;
-    }
+    return double.tryParse(buttonText) != null;
   }
 
   @override
@@ -51,4 +47,3 @@ class OperatorButton extends StatelessWidget {
     );
   }
 }
-
