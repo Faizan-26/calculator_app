@@ -1,3 +1,4 @@
+import 'package:calculator_app/contants/wakelockprovider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:calculator_app/provider/theme_provider.dart';
@@ -12,13 +13,13 @@ class SettingScreen extends ConsumerStatefulWidget {
 }
 
 class SettingScreenState extends ConsumerState<SettingScreen> {
-  late bool wakeLock;
+  // late bool wakeLock;
   late Color selectedColor;
 
   @override
   void initState() {
     super.initState();
-    wakeLock = false;
+    // wakeLock = wakeLockConst;
     selectedColor = ref.read(colorProvider).color;
   }
 
@@ -83,12 +84,12 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
             ),
             const Divider(),
             CheckboxListTile.adaptive(
-              value: wakeLock,
+              value: wakeLockConst,
               onChanged: (val) {
                 if (val != null) {
-                  wakeLock = val;
+                  wakeLockConst = val;
                   setState(() {
-                    Wakelock.toggle(enable: wakeLock);
+                    Wakelock.toggle(enable: wakeLockConst);
                   });
                   // print("WAKE LOCK VALUE : $wakeLock");
                 }

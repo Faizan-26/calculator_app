@@ -1,17 +1,19 @@
+import 'package:calculator_app/provider/calculation_history_provider.dart';
 import 'package:calculator_app/screen/contants.dart';
 import 'package:calculator_app/widgets/operator_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:math_expressions/math_expressions.dart';
 import 'package:flutter/services.dart';
 
-class CalcScreen extends StatefulWidget {
+class CalcScreen extends ConsumerStatefulWidget {
   const CalcScreen({super.key});
 
   @override
-  State<CalcScreen> createState() => _CalcScreenState();
+  ConsumerState<CalcScreen> createState() => _CalcScreenState();
 }
 
-class _CalcScreenState extends State<CalcScreen> {
+class _CalcScreenState extends ConsumerState<CalcScreen> {
   String writtenExpression = "";
   String resultExpression = "0";
 
@@ -38,7 +40,7 @@ class _CalcScreenState extends State<CalcScreen> {
       resultExpression = resultExpression.replaceAllMapped(
           RegExp(r'(\d+) \* √(\d+)'),
           (match) => '${match.group(1)}√${match.group(2)}');
-
+      ref.watch(historyProvider).addToHistory(resultExpression, result);
       setState(() {
         writtenExpression = resultExpression;
         resultExpression = result;
@@ -82,11 +84,19 @@ class _CalcScreenState extends State<CalcScreen> {
   }
 
   void onLongPressedClear() {
+    
     HapticFeedback.heavyImpact();
     setState(() {
       writtenExpression = "";
       resultExpression = "0";
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    // store the history
+    ref.watch(historyProvider).storeHistory();
   }
 
   @override
