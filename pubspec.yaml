@@ -35,7 +35,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   math_expressions: ^2.4.0
-  color_picker_field: ^2.1.0
+  flex_color_picker: ^3.3.1
   flutter_riverpod: ^1.0.0-dev.6
   wakelock: ^0.6.2
   shared_preferences: ^2.2.2
@@ -44,6 +44,7 @@ dependencies:
   path_provider: ^2.1.2
   hive_generator: ^2.0.1
   build_runner: ^2.4.8
+  units_converter: ^3.0.0
   # flutter_riverpod: ^0.14.0
 
 dev_dependencies:

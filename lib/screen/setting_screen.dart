@@ -1,9 +1,10 @@
 import 'package:calculator_app/contants/wakelockprovider.dart';
+import 'package:flex_color_picker/flex_color_picker.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:calculator_app/provider/theme_provider.dart';
-import 'package:color_picker_field/color_picker_field.dart';
+// import 'package:color_picker_field/color_picker_field.dart';
 import 'package:wakelock/wakelock.dart';
 
 class SettingScreen extends ConsumerStatefulWidget {
@@ -49,37 +50,79 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
                 ),
               ),
               title: const Text('Customize color'),
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: const Text('Customize color'),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text('Select a color'),
-                          ColorPicker(
-                            currentColor: selectedColor,
-                            onChange: (value) {
-                              selectedColor = value;
-                            },
-                          )
-                        ],
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            ref.read(colorProvider).changeColor(selectedColor);
-                          },
-                          child: const Text('Select'),
-                        ),
-                      ],
-                    );
+              onTap: () async {
+                // Wait for the dialog to return color selection result.
+                final Color newColor = await showColorPickerDialog(
+                  context,
+                  selectedColor,
+                  width: 70,
+                  elevation: 4,
+                  height: 40,
+                  spacing: 2,
+                  runSpacing: 2,
+                  borderRadius: 15,
+                  wheelDiameter: 150,
+                  enableOpacity: true,
+                  showColorCode: true,
+                  colorCodeHasColor: true,
+                  pickersEnabled: <ColorPickerType, bool>{
+                    ColorPickerType.wheel: true,
                   },
+                  copyPasteBehavior: const ColorPickerCopyPasteBehavior(
+                    copyButton: true,
+                    pasteButton: true,
+                  ),
+                  actionButtons: const ColorPickerActionButtons(
+                    okButton: true,
+                    closeButton: true,
+                    dialogActionButtons: false,
+                  ),
+                  constraints: const BoxConstraints(
+                      minHeight: 480, minWidth: 180, maxWidth: 380),
                 );
+                // We update the dialogSelectColor, to the returned result
+                // color. If the dialog was dismissed it actually returns
+                // the color we started with. The extra update for that
+                // below does not really matter, but if you want you can
+                // check if they are equal and skip the update below.
+                setState(() {
+                  selectedColor = newColor;
+                  ref.read(colorProvider).changeColor(newColor);
+                });
               },
+              // onTap: () {
+              //   showDialog(
+              //     context: context,
+              //     builder: (context) {
+              //       return AlertDialog(
+              //         title: const Text('Customize color'),
+              //         content: Column(
+              //           mainAxisSize: MainAxisSize.min,
+              //           children: [
+              //             const Text('Select a color'),
+              //             // ColorPicker(
+
+              //             //   currentColor: selectedColor,
+              //             //   onChange: (value) {
+              //             //     selectedColor = value;
+              //             //   },
+              //             // )
+              //             showColorPickerDialog(context, color)
+              //           ],
+              //         ),
+              //         actions: [
+              //           TextButton(
+              //             onPressed: () {
+              //               Navigator.of(context).pop();
+              //               ref.read(colorProvider).changeColor(selectedColor);
+              //             },
+              //             child: const Text('Select'),
+              //           ),
+              //         ],
+              //       );
+              //     },
+              //   );
+              // },
             ),
             const Divider(),
             CheckboxListTile.adaptive(

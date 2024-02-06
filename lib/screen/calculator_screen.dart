@@ -1,5 +1,6 @@
 import 'package:calculator_app/provider/calculation_history_provider.dart';
 import 'package:calculator_app/screen/calc_screen.dart';
+import 'package:calculator_app/screen/convertor_list_screen.dart';
 import 'package:calculator_app/screen/setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -88,9 +89,15 @@ class CalculatorScreen extends ConsumerWidget {
                 );
               },
               icon: const Icon(Icons.settings)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.info_outline)),
           IconButton(
-              onPressed: () {}, icon: const Icon(Icons.more_vert_rounded)),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const ConvertorListScreen(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.info_outline)),
         ],
       ),
       body: const CalcScreen(),

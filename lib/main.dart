@@ -2,6 +2,7 @@ import 'package:calculator_app/provider/calculation_history_provider.dart';
 import 'package:calculator_app/provider/theme_provider.dart';
 import 'package:calculator_app/screen/calculator_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
 
@@ -9,8 +10,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   await Hive.openBox<List<dynamic>>('calculationHistory');
-
-  runApp(const ProviderScope(child: MyApp()));
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
+    runApp(const ProviderScope(child: MyApp()));
+  });
 }
 
 class MyApp extends ConsumerStatefulWidget {
@@ -36,9 +39,11 @@ class MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    ref.watch(colorProvider).getColor().then((value) {
-      themeColor = value;
-    });
+    ref.watch(colorProvider).getColor().then(
+      (value) {
+        themeColor = value;
+      },
+    );
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -51,8 +56,12 @@ class MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
             : null,
       ),
       home: themeColor == null
-          ? const Center(child: CircularProgressIndicator())
-          : const Center(child: CalculatorScreen()),
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : const Center(
+              child: CalculatorScreen(),
+            ),
     );
   }
 }
