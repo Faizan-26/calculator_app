@@ -42,7 +42,7 @@ List<Map<String, dynamic>> converterList = [
     'icon': Icons.compass_calibration,
   },
   {
-    'torque': 'Torque',
+    'name': 'Torque',
     'icon': Icons.settings_backup_restore,
   }
 ];

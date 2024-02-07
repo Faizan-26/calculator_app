@@ -7,22 +7,29 @@ class ConvertorListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final converterGrid = converterList;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Converters'),
+        title: const Text('Converter'),
       ),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           int itemCount = constraints.maxWidth > 600 ? 3 : 2;
-
+          itemCount = constraints.maxWidth > 1200 ? 4 : itemCount;
           return GridView.builder(
+            itemCount: converterGrid.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: itemCount,
             ),
             itemBuilder: (context, index) {
-              return ConverterCard(
-                name: converterList[index]['name'],
-                icon: converterList[index]['icon'],
+              return GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => converterGrid[index]['route']));
+                },
+                child: ConverterCard(
+                  name: converterGrid[index]['name'].toString(),
+                  icon: converterGrid[index]['icon'],
+                ),
               );
             },
           );

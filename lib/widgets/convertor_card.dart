@@ -1,24 +1,3 @@
-// import 'package:flutter/material.dart';
-
-// class ConverterCard extends StatelessWidget {
-
-// final String name;
-// final IconData icon;
-//   @override
-//   Widget build(BuildContext context) {
-// return Card(
-//   child: Padding(
-//     padding: const EdgeInsets.all(16.0),
-//     child: Column(
-//       children: [
-//         // Add your converter UI elements here
-//       ],
-//     ),
-//   ),
-// );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 
 class ConverterCard extends StatelessWidget {
@@ -29,9 +8,12 @@ class ConverterCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: const EdgeInsets.all(10),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(14.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon(
               color: Theme.of(context).primaryColor,
