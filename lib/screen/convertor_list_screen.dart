@@ -1,4 +1,5 @@
 import 'package:calculator_app/contants/convertor_list.dart';
+import 'package:calculator_app/screen/convertor_screen.dart';
 import 'package:calculator_app/widgets/convertor_card.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +11,7 @@ class ConvertorListScreen extends StatelessWidget {
     final converterGrid = converterList;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Converter'),
+        title: const Text('Converters List'),
       ),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
@@ -23,8 +24,11 @@ class ConvertorListScreen extends StatelessWidget {
             ),
             itemBuilder: (context, index) {
               return GestureDetector(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => converterGrid[index]['route']));
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>  ConverterScreen(appbarName : converterGrid[index]['name'].toString() )));
                 },
                 child: ConverterCard(
                   name: converterGrid[index]['name'].toString(),

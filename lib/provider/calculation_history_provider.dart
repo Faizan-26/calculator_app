@@ -38,8 +38,7 @@ class HistoryNotifier extends ChangeNotifier {
       box = Hive.box<List<dynamic>>("calculationHistory");
     }
     final data = await box!.get(historyKey);
-    // box.get(historyKey);
-    
+  
     List<Map<String, String>> convertedData = [];
     if (data == null) {
       return;
@@ -56,28 +55,6 @@ class HistoryNotifier extends ChangeNotifier {
   }
 }
 
-// void loadHistory() async {
-//   if (box == null || !box!.isOpen) {
-//     box = Hive.box<List<Map<String, String>>>("calculationHistory");
-//   }
-//   final data = await box!.get(historyKey);
-//   // box.get(historyKey);
-//   print(data);
-//   List<Map<String, String>> convertedData = [];
-//   if (data == null) {
-//     return;
-//   }
-//   for (var item in data) {
-//     if (item != null && item is Map<dynamic, dynamic>) {
-//       String question = item['question'].toString();
-//       String result = item['result'].toString();
-//       convertedData.add({'question': question, 'result': result});
-//     }
-//   }
-//   _calculationHistory = convertedData;
-//   notifyListeners();
-// }
-//}
 
 final historyProvider = ChangeNotifierProvider<HistoryNotifier>((ref) {
   return HistoryNotifier();

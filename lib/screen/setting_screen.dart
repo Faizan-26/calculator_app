@@ -61,8 +61,6 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
                   spacing: 2,
                   runSpacing: 2,
                   borderRadius: 15,
-                  wheelDiameter: 150,
-                  enableOpacity: true,
                   showColorCode: true,
                   colorCodeHasColor: true,
                   pickersEnabled: <ColorPickerType, bool>{
@@ -90,39 +88,6 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
                   ref.read(colorProvider).changeColor(newColor);
                 });
               },
-              // onTap: () {
-              //   showDialog(
-              //     context: context,
-              //     builder: (context) {
-              //       return AlertDialog(
-              //         title: const Text('Customize color'),
-              //         content: Column(
-              //           mainAxisSize: MainAxisSize.min,
-              //           children: [
-              //             const Text('Select a color'),
-              //             // ColorPicker(
-
-              //             //   currentColor: selectedColor,
-              //             //   onChange: (value) {
-              //             //     selectedColor = value;
-              //             //   },
-              //             // )
-              //             showColorPickerDialog(context, color)
-              //           ],
-              //         ),
-              //         actions: [
-              //           TextButton(
-              //             onPressed: () {
-              //               Navigator.of(context).pop();
-              //               ref.read(colorProvider).changeColor(selectedColor);
-              //             },
-              //             child: const Text('Select'),
-              //           ),
-              //         ],
-              //       );
-              //     },
-              //   );
-              // },
             ),
             const Divider(),
             CheckboxListTile.adaptive(

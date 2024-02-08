@@ -10,7 +10,7 @@ class ConverterCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.all(10),
       child: Padding(
-        padding: const EdgeInsets.all(14.0),
+        padding: const EdgeInsets.all(12.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -18,7 +18,7 @@ class ConverterCard extends StatelessWidget {
             Icon(
               color: Theme.of(context).primaryColor,
               icon,
-              size: 50,
+              size: 30,
             ),
             const SizedBox(
               height: 10,

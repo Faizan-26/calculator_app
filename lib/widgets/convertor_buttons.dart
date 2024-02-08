@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class OperatorButton extends StatelessWidget {
-  const OperatorButton(
+class ConvertorButton extends StatelessWidget {
+  const ConvertorButton(
       {super.key,
       required this.buttonText,
       required this.btnTaped,
@@ -17,6 +17,7 @@ class OperatorButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      // height: 1,
       margin: const EdgeInsets.all(4),
       child: Material(
         color: !isNumeric()
@@ -24,11 +25,10 @@ class OperatorButton extends StatelessWidget {
             : Theme.of(context).colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(25),
         child: InkWell(
-          splashColor: !isNumeric()
-              ? Theme.of(context).colorScheme.primaryContainer
-              : Theme.of(context)
-                  .colorScheme
-                  .inversePrimary, // Change the splash color here
+          splashColor: Theme.of(context)
+              .colorScheme
+              .onSurface, // Change the splash color here
+
           borderRadius: BorderRadius.circular(25),
           onTap: () {
             btnTaped(buttonText);
