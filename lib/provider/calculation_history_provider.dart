@@ -38,7 +38,7 @@ class HistoryNotifier extends ChangeNotifier {
       box = Hive.box<List<dynamic>>("calculationHistory");
     }
     final data = await box!.get(historyKey);
-  
+
     List<Map<String, String>> convertedData = [];
     if (data == null) {
       return;
@@ -55,7 +55,8 @@ class HistoryNotifier extends ChangeNotifier {
   }
 }
 
-
-final historyProvider = ChangeNotifierProvider<HistoryNotifier>((ref) {
-  return HistoryNotifier();
-});
+final historyProvider = ChangeNotifierProvider<HistoryNotifier>(
+  (ref) {
+    return HistoryNotifier();
+  },
+);
