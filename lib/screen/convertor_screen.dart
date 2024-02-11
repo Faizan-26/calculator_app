@@ -1,32 +1,39 @@
 import 'package:calculator_app/contants/convertor_buttons.dart';
 import 'package:calculator_app/widgets/convertor_buttons.dart';
 import 'package:flutter/material.dart';
+import 'package:units_converter/properties/length.dart';
+import 'package:units_converter/units_converter.dart';
 
 class ConverterScreen extends StatefulWidget {
-  const ConverterScreen({super.key, required this.appbarName});
-  final String appbarName;
+  const ConverterScreen({super.key, required this.currentUnitName});
+  final String currentUnitName;
 
   @override
   State<ConverterScreen> createState() => _ConverterScreenState();
 }
 
 class _ConverterScreenState extends State<ConverterScreen> {
+  // AutomaticKeepAliveClientMixin is used to keep the state of the widget , before this is was causing infinte randering because prop is being passed by statefull widget and its parent is a gridview/listview
   String upperValue = "1";
   String lowerValue = "0";
+
   void btnTaped(String s) {
-    print(s);
+    // print(s);
   }
 
   void onLongPressedClear() {
-    print('C');
+    // print('C');
   }
 
+  void getUnitData() {}
+
   bool toggleSwap = false; // this is used to swap upper and lower section
+
   @override
   Widget build(BuildContext context) {
     Widget upperSection = InkWell(
       onTap: () {
-        print('Tapped');
+        // print('Tapped');
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -90,7 +97,7 @@ class _ConverterScreenState extends State<ConverterScreen> {
 
     Widget lowerSection = InkWell(
       onTap: () {
-        print('Lower Section Tapped');
+        // print('Lower Section Tapped');
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -172,25 +179,26 @@ class _ConverterScreenState extends State<ConverterScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('${widget.appbarName} Converter'),
+        title: Text('${widget.currentUnitName} Converter'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-              flex: 1,
-              child: Column(
-                children: [
-                  Material(
-                    color: Theme.of(context).colorScheme.primaryContainer,
-                    child: !toggleSwap ? upperSection : lowerSection,
-                  ),
-                  centralButton,
-                  Material(
-                    child: toggleSwap ? upperSection : lowerSection,
-                  ),
-                ],
-              )),
+            flex: 1,
+            child: Column(
+              children: [
+                Material(
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                  child: !toggleSwap ? upperSection : lowerSection,
+                ),
+                centralButton,
+                Material(
+                  child: toggleSwap ? upperSection : lowerSection,
+                ),
+              ],
+            ),
+          ),
           Expanded(
               flex: 1,
               child: Padding(

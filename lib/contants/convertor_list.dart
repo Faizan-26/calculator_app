@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-List<Map<String, dynamic>> converterList = [
+const List<Map<String, dynamic>> converterList = [
   {
     'name': 'Length',
     'icon': Icons.linear_scale,

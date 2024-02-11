@@ -93,7 +93,7 @@ class CalculatorScreen extends ConsumerWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => const ConvertorListScreen(),
+                    builder: (context) =>const ConvertorListScreen(),
                   ),
                 );
               },
