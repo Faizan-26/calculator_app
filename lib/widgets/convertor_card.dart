@@ -3,32 +3,35 @@ import 'package:calculator_app/contants/convertor_list.dart';
 import 'package:calculator_app/screen/convertor_screen.dart';
 import 'package:flutter/material.dart';
 
-class ConverterCard extends StatefulWidget {
+class ConverterCard extends StatelessWidget {
   const ConverterCard(
       {super.key, required this.name, required this.icon, required this.index});
   final int index;
   final String name;
   final IconData icon;
 
-  @override
-  State<ConverterCard> createState() => _ConverterCardState();
-}
+  void onTapFunc(BuildContext ctx) {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(
+        maintainState: true,
+        builder: (ctx) {
+          print(
+              "Navigatoing to converter screen"); // why this is being printed infinite times
 
-class _ConverterCardState extends State<ConverterCard> {
-  Future<void> onTapFunc() async {
-    await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return Builder(builder: (context) {
-        return ConverterScreen(
-          currentUnitName: converterList[widget.index]['name'].toString(),
-        );
-      });
-    }));
+          return ConverterScreen(
+            currentUnitName: converterList[index]['name'],
+          );
+        },
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTapFunc,
+      onTap: () {
+        onTapFunc(context);
+      },
       child: Card(
         margin: const EdgeInsets.all(10),
         child: Padding(
@@ -39,14 +42,14 @@ class _ConverterCardState extends State<ConverterCard> {
             children: [
               Icon(
                 color: Theme.of(context).primaryColor,
-                widget.icon,
+                icon,
                 size: 30,
               ),
               const SizedBox(
                 height: 10,
               ),
               Text(
-                widget.name,
+                name,
                 style: const TextStyle(
                   fontSize: 20,
                 ),
