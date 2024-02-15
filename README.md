@@ -1,6 +1,7 @@
 # calculator_app
 
-A new Flutter project.
+Calculator app made with flutter clone of simple Calculator app of playstore
+
 
 ## Getting Started
 
